@@ -2,6 +2,6 @@
 sed -Ei \
     -e 's/"personal_number": .*(,|$)/"personal_number": XXXXXX\1/g' \
     -e 's/personal_number=.*"/personal_number=XXXXXX"/g' \
-    *.log
+    logs/*.log
 
-! grep personal_number *.log | grep -v XXXXXX
+! grep personal_number logs/*.log | grep -v XXXXXX

@@ -11,13 +11,12 @@ b() {
     . venv/bin/activate
     gunicorn -w 2 "$2" &
     sleep 2
+    H="-H "
     if [ -z "$4" ]; then
-        H="X-Dummy: dummy"
-    else
-        H="$4"
+        H=""
     fi
-    curl -H "$H" "http://localhost:8000$3" | python3 -m json.tool
-    ab_out=`ab -n "$NUM" -c "$CON" -H "$H" "http://localhost:8000$3"`
+    curl $H "$4" "http://localhost:8000$3" | python3 -m json.tool
+    ab_out=`ab -n "$NUM" -c "$CON" $H "$4" "http://localhost:8000$3"`
     killall gunicorn
     rps=`echo "$ab_out" | grep "Requests per second"`
     crs=`echo "$ab_out" | grep "Complete requests"`

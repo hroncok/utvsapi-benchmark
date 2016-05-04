@@ -14,11 +14,7 @@ b() {
     sleep 2
     echo GET "$3"
     H="-H "
-    if [ -z "$4" ]; then
-        H=""
-    else
-        echo "$4"
-    fi
+    if [ -z "$4" ]; then H=""; else echo "$4"; fi
     echo
     curl $H "$4" "http://localhost:8000$3" | python3 -m json.tool
     ab_out=`ab -n "$NUM" -c "$CON" $H "$4" "http://localhost:8000$3"`

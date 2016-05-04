@@ -73,7 +73,7 @@ test_studentauth() {
     b `f r` /enrollments/?count=20 "Authorization: Bearer $STUDENT"
 }
 
-test_$1
+$1
 
 sleep 2
 echo -e "$output"

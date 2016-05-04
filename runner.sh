@@ -8,6 +8,7 @@ output="Test results:\n"
 b() {
     echo "IN: $1"
     pushd "$1" > /dev/null
+    set +u # activate would fail
     . venv/bin/activate
     gunicorn -w 2 "$2" &
     sleep 2
@@ -68,6 +69,7 @@ test_godauth() {
 }
 
 test_studentauth() {
+    set -u
     b `f d` /enrollments/?page_size=20 "Authorization: Token $STUDENT"
     b `f e` /enrollments/?max_results=20 "Authorization: Bearer $STUDENT"
     b `f r` /enrollments/?count=20 "Authorization: Bearer $STUDENT"

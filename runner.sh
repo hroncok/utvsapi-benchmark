@@ -116,7 +116,7 @@ test_list() {
 
 test_filter() {
     b `f d` '/courses/?page_size=20&day=5'
-    b `f e` '/courses/?max_results=20&where=\{"day":5\}'
+    b `f e` '/courses/?max_results=20&where=%7B%22day%22%3A5%7D'
     b `f r` '/courses/?count=20&day=5'
     b `f s` '/courses?page=1&day=5'
 }

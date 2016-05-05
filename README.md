@@ -49,7 +49,7 @@ Running all not auth related tests and observing the logs together with saving t
 
 Note that in the spirit of fair play, you should disable auth in other implementations
 if you'd like to compare them with [utvsapi-sandman](https://github.com/hroncok/utvsapi-sandman);
-there is no simple way to do so, but special `noauth` branches will be provided soon.
+there is no simple way to do so, but special `noauth` branches are available in the repos.
 
 Customization
 -------------

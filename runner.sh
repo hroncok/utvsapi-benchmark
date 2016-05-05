@@ -18,11 +18,16 @@ b() {
     gunicorn -w 2 "$2" &
     sleep 2
     echo GET "$3"
-    H="-H "
-    if [ -z "$4" ]; then H=""; else echo "$4"; fi
-    echo
-    curl $H "$4" "http://localhost:8000$3" | python3 -m json.tool
-    ab_out=`ab -n "$NUM" -c "$CON" $H "$4" "http://localhost:8000$3"`
+    if [ -z "$4" ]; then
+        echo
+        curl "http://localhost:8000$3" | python3 -m json.tool
+        ab_out=`ab -n "$NUM" -c "$CON" -H "$4" "http://localhost:8000$3"`
+    else
+        echo "$4"
+        echo
+        curl $H "$4" "http://localhost:8000$3" | python3 -m json.tool
+        ab_out=`ab -n "$NUM" -c "$CON" "http://localhost:8000$3"`
+    fi
     killall gunicorn
     rps=`echo "$ab_out" | grep "Requests per second"`
     crs=`echo "$ab_out" | grep "Complete requests"`
@@ -93,6 +98,27 @@ test_studentauth_one() {
     b `f d` /enrollments/25563/ "Authorization: Token $STUDENT"
     b `f e` /enrollments/25563/ "Authorization: Bearer $STUDENT"
     b `f r` /enrollments/25563/ "Authorization: Bearer $STUDENT"
+}
+
+test_one() {
+    b `f d` /enrollments/25563/
+    b `f e` /enrollments/25563/
+    b `f r` /enrollments/25563/
+    b `f s` /enrollments/25563
+}
+
+test_list() {
+    b `f d` /enrollments/?page_size=20
+    b `f e` /enrollments/?max_results=20
+    b `f r` /enrollments/?count=20
+    b `f s` /enrollments?page=1
+}
+
+test_filter() {
+    b `f d` '/courses/?page_size=20&day=5'
+    b `f e` '/courses/?max_results=20&where=\{"day":5\}'
+    b `f r` '/courses/?count=20&day=5'
+    b `f s` '/courses?page=1&day=5'
 }
 
 $1

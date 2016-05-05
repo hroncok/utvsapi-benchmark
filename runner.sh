@@ -1,6 +1,11 @@
 #!/bin/bash -e
-NUM=5000
-CON=100
+if [ -z "$DEBUG" ]; then
+    NUM=5000
+    CON=100
+else
+    NUM=5
+    CON=1
+fi
 
 output="Test results:\n"
 
@@ -69,6 +74,25 @@ test_studentauth() {
     b `f d` /enrollments/?page_size=20 "Authorization: Token $STUDENT"
     b `f e` /enrollments/?max_results=20 "Authorization: Bearer $STUDENT"
     b `f r` /enrollments/?count=20 "Authorization: Bearer $STUDENT"
+}
+
+test_teacherauth_one() {
+    b `f d` /enrollments/25563/ "Authorization: Token 666"
+    b `f e` /enrollments/25563/ "Authorization: Bearer 666"
+    b `f r` /enrollments/25563/ "Authorization: Bearer 666"
+}
+
+test_godauth_one() {
+    b `f d` /enrollments/25563/ "Authorization: Token GODGODGOD"
+    b `f e` /enrollments/25563/ "Authorization: Bearer GODGODGOD"
+    b `f r` /enrollments/25563/ "Authorization: Bearer GODGODGOD"
+}
+
+test_studentauth_one() {
+    set -u
+    b `f d` /enrollments/25563/ "Authorization: Token $STUDENT"
+    b `f e` /enrollments/25563/ "Authorization: Bearer $STUDENT"
+    b `f r` /enrollments/25563/ "Authorization: Bearer $STUDENT"
 }
 
 $1
